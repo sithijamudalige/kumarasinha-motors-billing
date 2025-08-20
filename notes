@@ -1,0 +1,6 @@
+POS_Project/
+├── main.py
+├── inventory.db
+├── utils/
+└── assets/
+pip install pyinstaller
