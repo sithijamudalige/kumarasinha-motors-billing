@@ -145,3 +145,10 @@ Traceback (most recent call last):
   File "C:\Users\sithi\AppData\Local\Programs\Python\Python311\Lib\tkinter\__init__.py", line 1504, in mainloop
     self.tk.mainloop(n)
 KeyboardInterrupt
+=== Exception Occurred ===
+Traceback (most recent call last):
+  File "F:\githubrepo\kumarasinha-motors-billing\main.py", line 100, in <module>
+    app.mainloop()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\tkinter\__init__.py", line 1485, in mainloop
+    self.tk.mainloop(n)
+KeyboardInterrupt
