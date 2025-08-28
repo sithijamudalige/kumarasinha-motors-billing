@@ -157,23 +157,28 @@ class PartsManagement(tk.Frame):
                     font=("Segoe UI", 10), bg='white', fg='#adb5bd').pack()
             return
 
-        # Create header
+        # Create header with centered text and appropriate column widths
         headers = ["ID", "Name", "Model", "Size", "Buy Price", "Qty", "Total Value", "Sell Price", "Add Date", "Actions"]
+        col_widths = [5, 20, 15, 10, 12, 8, 15, 12, 15, 15]  # Adjusted widths for better fit
+        
         header_frame = tk.Frame(self.parts_frame, bg='#3a7ca5')
         header_frame.pack(fill='x', pady=(0, 5))
         
-        col_widths = [5, 15, 12, 8, 10, 6, 12, 10, 12, 12]
-        
         for i, (col, width) in enumerate(zip(headers, col_widths)):
             tk.Label(header_frame, text=col, width=width, bg='#3a7ca5', fg='white', 
-                    font=("Segoe UI", 10, "bold"), padx=5, pady=8, anchor='w' if i > 0 else 'center').pack(side="left")
+                    font=("Segoe UI", 10, "bold"), padx=5, pady=8, anchor='center').pack(side="left")
 
         for part in parts:
             # Determine row color based on stock level
             qty = part[5] if part[5] else 0
-            if int(qty) == 0:
+            try:
+                qty_int = int(qty)
+            except (ValueError, TypeError):
+                qty_int = 0
+                
+            if qty_int == 0:
                 row_color = '#ffeaea'  # Light red for out of stock
-            elif int(qty) < 5:
+            elif qty_int < 5:
                 row_color = '#fff3cd'  # Light yellow for low stock
             else:
                 row_color = 'white'
@@ -183,20 +188,24 @@ class PartsManagement(tk.Frame):
             row.pack(fill='x', pady=(0, 1))
             row.part_data = part  # Store part data for filtering
             
-            # Display part data
+            # Display part data with proper formatting and alignment
             for i, (val, width) in enumerate(zip(part, col_widths)):
                 if i >= 10:  # Skip some fields to fit the UI
                     continue
                     
                 if i in [4, 6, 7]:  # Format currency fields
-                    display_text = f"${float(val):.2f}" if val else "$0.00"
+                    try:
+                        display_text = f"${float(val):.2f}" if val else "$0.00"
+                    except (ValueError, TypeError):
+                        display_text = "$0.00"
                 elif i == 5:  # Quantity - highlight if low
                     display_text = str(val) if val else "0"
                 else:
                     display_text = str(val) if val else ""
                 
-                anchor = 'w' if i > 0 else 'center'
-                fg = '#e63946' if i == 5 and int(qty) == 0 else ('#856404' if i == 5 and int(qty) < 5 else '#2f3e46')
+                # Center align all cells except Name which is left-aligned
+                anchor = 'w' if i == 1 else 'center'
+                fg = '#e63946' if i == 5 and qty_int == 0 else ('#856404' if i == 5 and qty_int < 5 else '#2f3e46')
                 
                 tk.Label(row, text=display_text, width=width, anchor=anchor, 
                         bg=row_color, font=("Segoe UI", 9), fg=fg, padx=5).pack(side="left")
@@ -214,7 +223,7 @@ class PartsManagement(tk.Frame):
                      relief='flat', cursor='hand2', activebackground='#e76f51').pack(side='left', padx=1)
             
             tk.Button(action_frame, text="Delete", command=lambda p=part: self.remove_part(p),
-                     bg='#e76f51', fg='white', font=("Segoe UI", 8, "bold"), width=4, 
+                     bg='#e76f51', fg='white', font=("Segoe UI", 8, "bold"), width=5, 
                      relief='flat', cursor='hand2', activebackground='#d6543a').pack(side='left', padx=1)
         
         # Update summary after displaying parts
@@ -230,8 +239,14 @@ class PartsManagement(tk.Frame):
             messagebox.showinfo("Success", f"Part '{part[1]}' has been deleted successfully.")
 
     def update_part_quantity(self, part):
+        current_qty = part[5] if part[5] else 0
+        try:
+            current_qty_int = int(current_qty)
+        except (ValueError, TypeError):
+            current_qty_int = 0
+            
         qty = simpledialog.askinteger("Update Quantity", 
-                                     f"Current quantity for '{part[1]}': {part[5]}\n\nEnter new quantity to add:",
+                                     f"Current quantity for '{part[1]}': {current_qty_int}\n\nEnter new quantity to add:",
                                      minvalue=0, initialvalue=0)
         if qty is not None:
             update_quantity(part[0], qty)
@@ -283,7 +298,7 @@ class PartsManagement(tk.Frame):
         button_frame = tk.Frame(main_frame, bg='#f8f9fa')
         button_frame.pack(pady=20)
         
-        def save():
+        def save_changes():
             values = [e.get() for e in entries]
             try:
                 updated_data = [
@@ -302,7 +317,7 @@ class PartsManagement(tk.Frame):
             self.display_parts()
             messagebox.showinfo("Success", f"Part '{values[0]}' has been updated successfully.")
 
-        tk.Button(button_frame, text="Save Changes", command=save,
+        tk.Button(button_frame, text="Save Changes", command=save_changes,
                  bg='#2a9d8f', fg='white', font=("Segoe UI", 10, "bold"), width=15, 
                  relief='flat', cursor='hand2', activebackground='#21867a', padx=10, pady=6).pack(side='left', padx=10)
         
