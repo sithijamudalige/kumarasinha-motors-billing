@@ -67,7 +67,7 @@ class AddParts(tk.Frame):
                 prefix = tk.Frame(entry_frame, width=30, height=36, bg='#ecf0f1')
                 prefix.pack_propagate(False)
                 prefix.pack(side=tk.LEFT)
-                tk.Label(prefix, text="$", bg='#ecf0f1', fg='#7f8c8d', 
+                tk.Label(prefix, text="LKR ", bg='#ecf0f1', fg='#7f8c8d', 
                         font=("Arial", 12)).place(relx=0.5, rely=0.5, anchor='center')
                 
                 entry = tk.Entry(entry_frame, font=("Arial", 11), relief=tk.FLAT, 

@@ -207,7 +207,7 @@ class ViewSalesHistory(tk.Frame):
         total_quantity = sum(row[3] for row in rows)  # Quantity column is index 3
         
         self.summary_label.config(
-            text=f"Total Sales: {total_sales} | Revenue: ${total_revenue:,.2f} | Items Sold: {total_quantity}"
+            text=f"Total Sales: {total_sales} | Revenue: LKR {total_revenue:,.2f} | Items Sold: {total_quantity}"
         )
 
     def search(self):
@@ -281,7 +281,7 @@ class ViewSalesHistory(tk.Frame):
             # Add summary information
             total_sales = len(self.filtered_rows)
             total_revenue = sum(row[5] for row in self.filtered_rows)
-            c.drawString(30, height - 80, f"Total Sales: {total_sales} | Total Revenue: ${total_revenue:,.2f}")
+            c.drawString(30, height - 80, f"Total Sales: {total_sales} | Total Revenue: LKR {total_revenue:,.2f}")
 
             # Add filter info if any filters are applied
             y_offset = 100
@@ -316,7 +316,7 @@ class ViewSalesHistory(tk.Frame):
                 for i, value in enumerate(row):
                     # Format numeric values
                     if i in [4, 5]:  # Price and Total columns
-                        formatted_value = f"${float(value):.2f}" if value else "$0.00"
+                        formatted_value = f"LKR {float(value):.2f}" if value else "LKR 0.00"
                         c.drawString(x, y, formatted_value)
                     else:
                         c.drawString(x, y, str(value))

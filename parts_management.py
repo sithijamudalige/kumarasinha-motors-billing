@@ -139,7 +139,7 @@ class PartsManagement(tk.Frame):
 
         stats = [
             ("Total Parts", total_parts, "#3a7ca5"),
-            ("Total Value", f"${total_value:,.2f}", "#2a9d8f"),
+            ("Total Value", f"LKR {total_value:,.2f}", "#2a9d8f"),
             ("Low Stock Items", low_stock, "#e76f51")
         ]
 
@@ -224,9 +224,9 @@ class PartsManagement(tk.Frame):
             for i, value in enumerate(part):
                 if i in [4, 6, 7]:  # Format currency fields
                     try:
-                        formatted_values.append(f"${float(value):.2f}" if value else "$0.00")
+                        formatted_values.append(f"LKR {float(value):.2f}" if value else "LKR 0.00")
                     except (ValueError, TypeError):
-                        formatted_values.append("$0.00")
+                        formatted_values.append("LKR 0.00")
                 else:
                     formatted_values.append(str(value) if value else "")
 
